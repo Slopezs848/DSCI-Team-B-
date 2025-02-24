@@ -1,0 +1,135 @@
+---
+title: "dsci_eda"
+output:
+  pdf_document: default
+  html_document: default
+date: "2025-02-19"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+# Load necessary libraries
+install.packages(c("tidyverse", "skimr", "corrplot", "ggplot2", "forcats"))
+library(tidyverse)
+library(skimr)
+library(corrplot)
+library(ggplot2)
+library(forcats)
+
+# Load the dataset
+autism_url <- "https://raw.githubusercontent.com/Slopezs848/DSCI-Team-B-/main/early_autism.csv"
+df <- read.csv(autism_url, stringsAsFactors = FALSE)
+
+# Quick dataset overview
+dim(df)  # Check dimensions
+skim(df) # Summarized stats
+
+# View first few rows
+head(df)
+
+# Data Type Inspection
+str(df)
+
+# Checking for Missing Values
+missing_values <- colSums(is.na(df))
+missing_values[missing_values > 0]  # Show only columns with missing values
+
+# Impute missing values
+# Replace missing numerical values with median
+if("age" %in% names(df)) {
+  df$age[is.na(df$age)] <- median(df$age, na.rm = TRUE)
+}
+
+# Replace missing categorical values with mode (most common value)
+replace_mode <- function(x) {
+  if (all(is.na(x)) || length(unique(na.omit(x))) == 0) return(x)  # Handle case where all values are NA
+  mode_value <- names(sort(table(x), decreasing = TRUE))[1]
+  x[is.na(x)] <- mode_value
+  return(x)
+}
+if("ethnicity" %in% names(df)) {
+  df$ethnicity <- replace_mode(df$ethnicity)
+}
+if("relation" %in% names(df)) {
+  df$relation <- replace_mode(df$relation)
+}
+
+# Identifying Duplicate Rows
+duplicates <- df[duplicated(df), ]
+nrow(duplicates)  # Count duplicate rows
+
+# Removing Duplicates
+df <- df[!duplicated(df), ]
+
+# Summary Statistics
+summary(df)
+
+# Autism Diagnosis Class Distribution
+if("class" %in% names(df)) {
+  class_counts <- table(df$class)
+  barplot(class_counts, col = c("#3498db", "#e74c3c"), main = "Autism Diagnosis Distribution",
+          xlab = "Diagnosis", ylab = "Count")
+}
+
+# Age Distribution
+if("age" %in% names(df)) {
+  hist(df$age, breaks = 10, col = "skyblue", main = "Age Distribution",
+       xlab = "Age", ylab = "Frequency")
+}
+
+# Gender Distribution
+if("gender" %in% names(df)) {
+  df$gender <- as.factor(df$gender)
+  ggplot(df, aes(x = gender, fill = gender)) +
+    geom_bar() +
+    theme_minimal() +
+    labs(title = "Gender Distribution", x = "Gender", y = "Count")
+}
+
+# Ethnicity Distribution
+if("ethnicity" %in% names(df) && any(!is.na(df$ethnicity))) {
+  df$ethnicity <- as.factor(df$ethnicity)
+  ggplot(df, aes(x = fct_infreq(ethnicity))) +
+    geom_bar(fill = "#1abc9c") +
+    theme_minimal() +
+    labs(title = "Ethnicity Breakdown", x = "Ethnicity", y = "Count") +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+
+# Family History of Autism
+if("autism" %in% names(df)) {
+  df$autism <- as.factor(df$autism)
+  ggplot(df, aes(x = autism, fill = autism)) +
+    geom_bar() +
+    theme_minimal() +
+    labs(title = "Family History of Autism", x = "Autism in Family", y = "Count")
+}
+
+# Jaundice as a Potential Risk Factor
+if("jaundice" %in% names(df)) {
+  df$jaundice <- as.factor(df$jaundice)
+  ggplot(df, aes(x = jaundice, fill = jaundice)) +
+    geom_bar() +
+    theme_minimal() +
+    labs(title = "Jaundice in Infancy", x = "Jaundice", y = "Count")
+}
+
+# Create Total AQ Score
+if(all(paste0("A", 1:10, "_Score") %in% names(df))) {
+  aq_columns <- paste0("A", 1:10, "_Score")
+  df$total_aq_score <- rowSums(df[, aq_columns], na.rm = TRUE)
+  hist(df$total_aq_score, breaks = 10, col = "purple", main = "Total AQ Score Distribution",
+       xlab = "Total AQ Score", ylab = "Frequency")
+}
+
+# Correlation Matrix
+if(ncol(df_numeric <- df %>% select_if(is.numeric)) > 1) {
+  cor_matrix <- cor(df_numeric, use = "complete.obs")
+  corrplot(cor_matrix, method = "circle", type = "upper", tl.cex = 0.8)
+
+```
+
