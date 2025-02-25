@@ -1,0 +1,159 @@
+---
+title: "muhozaclion_eda_dsci"
+output:
+  html_document: default
+  pdf_document: default
+date: "2025-02-24"
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggplot2)
+library(corrplot)
+library(gridExtra)
+library(wordcloud)
+library(RColorBrewer)
+library(cluster)
+library(factoextra)
+```
+
+
+## Data Context
+```{r}
+setwd("/Users/cmuhoza@unomaha.edu/Desktop/capstone")
+early_autism <- read.csv("early_autism.csv") 
+head(early_autism)
+
+print(paste("Dimensions of dataset:", dim(early_autism)))
+str(early_autism)
+summary(early_autism)
+
+# missing values
+missing_values <- colSums(is.na(early_autism))
+print(missing_values[missing_values > 0]) 
+
+```
+
+## Data Cleaning
+```{r}
+# Check for missing values
+colSums(is.na(early_autism))
+
+# Handle missing values:
+# - Numerical: Replace with median
+# - Categorical: Replace with mode
+mode_impute <- function(x) {
+  ux <- unique(x[!is.na(x)])
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+early_autism <- early_autism %>%
+  mutate(across(where(is.numeric), ~ ifelse(is.na(.), median(., na.rm = TRUE), .))) %>%
+  mutate(across(where(is.factor), ~ ifelse(is.na(.), mode_impute(.), .)))
+
+# Confirm missing values handled
+colSums(is.na(early_autism))
+
+
+```
+## Outlier
+
+```{r}
+# Function to detect and remove outliers using IQR
+detect_and_handle_outliers <- function(df, column_name) {
+  Q1 <- quantile(df[[column_name]], 0.25, na.rm = TRUE)
+  Q3 <- quantile(df[[column_name]], 0.75, na.rm = TRUE)
+  IQR <- Q3 - Q1
+  lower_bound <- Q1 - 1.5 * IQR
+  upper_bound <- Q3 + 1.5 * IQR
+
+  df <- df %>%
+    filter(df[[column_name]] >= lower_bound & df[[column_name]] <= upper_bound)
+  
+  return(df)
+}
+
+# Apply outlier detection to numerical variables
+score_columns <- c("A1_Score", "A2_Score", "A3_Score", "A4_Score", "A5_Score",
+                   "A6_Score", "A7_Score", "A8_Score", "A9_Score", "A10_Score", "age")
+
+for (col in score_columns) {
+  early_autism <- detect_and_handle_outliers(early_autism, col)
+}
+
+# Confirm that outliers were removed
+summary(early_autism)
+
+
+
+```
+## Analysis & Visualization
+```{r}
+ggplot(early_autism, aes(x = age, fill = as.factor(class))) +
+  geom_histogram(bins = 20, alpha = 0.7, position = "identity") +
+  scale_fill_manual(values = c("blue", "red"), labels = c("Non-Autistic", "Autistic")) +
+  labs(title = "Age Distribution by Autism Diagnosis", x = "Age", y = "Count", fill = "Class") +
+  theme_minimal()
+
+
+```
+```{r}
+ggplot(early_autism, aes(x = as.factor(gender), fill = as.factor(class))) +
+  geom_bar(position = "fill") +
+  scale_fill_manual(values = c("blue", "red"), labels = c("Non-Autistic", "Autistic")) +
+  labs(title = "Proportion of Autism Cases by Gender", x = "Gender", y = "Proportion", fill = "Class") +
+  theme_minimal()
+
+```
+
+```{r}
+# Identify ethnicity columns
+ethnicity_cols <- grep("ethnicity_", colnames(early_autism), value = TRUE)
+
+# Convert "True"/"False" to 1/0
+early_autism[ethnicity_cols] <- lapply(early_autism[ethnicity_cols], function(x) ifelse(x == "True", 1, 0))
+
+# Summarize ethnicity data
+ethnicity_counts <- colSums(early_autism[ethnicity_cols])
+ethnicity_df <- data.frame(Ethnicity = names(ethnicity_counts), Count = ethnicity_counts)
+
+ggplot(ethnicity_df, aes(x = reorder(Ethnicity, -Count), y = Count, fill = Ethnicity)) +
+  geom_bar(stat = "identity") +
+  coord_flip() +
+  labs(title = "Ethnicity Representation", x = "Ethnicity", y = "Count") +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+
+```
+```{r}
+cor_matrix <- cor(early_autism %>% select(where(is.numeric)), use = "complete.obs")
+corrplot(cor_matrix, method = "color", tl.cex = 0.8)
+
+```
+
+
+```{r}
+library(ggplot2)
+
+# Count occurrences of jaundice vs. autism class
+jaundice_counts <- early_autism %>%
+  group_by(jaundice, class) %>%
+  summarise(count = n())
+
+# Plot as a dot/lollipop chart
+ggplot(jaundice_counts, aes(x = as.factor(jaundice), y = count, color = as.factor(class))) +
+  geom_point(size = 4) +  # Dot
+  geom_segment(aes(xend = as.factor(jaundice), y = 0, yend = count), size = 1) +  # Line connecting to axis
+  scale_color_manual(values = c("blue", "red"), labels = c("Non-Autistic", "Autistic")) +
+  labs(title = "Jaundice vs. Autism Diagnosis", 
+       x = "Had Jaundice", 
+       y = "Number of Individuals", 
+       color = "Class") +
+  theme_minimal()
+
+```
+
+
