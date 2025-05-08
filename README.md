@@ -2,9 +2,11 @@
 
 **Modeling for Autistic Spectrum Disorder Screening Data for Children Dataset**
 
-**Description:** This dataset contains information related to the screening of autistic spectrum disorder (ASD) in children. It includes various demographic and behavioral features that are used to identify potential ASD cases.
+**Project Overview:** This project aims to develop a machine learning-based application for early autism detection in children, using a dataset introduced by Fadi Fayez Thabtah from the Department of Digital Technology at the Manukau Institute of Technology. The application leverages behavioral and demographic features to accurately predict autism spectrum disorder (ASD) traits, supporting timely intervention and improved long term outcomes. 
 
-**Attributes:**
+**Data Set Description:** This dataset contains information related to the screening of autistic spectrum disorder (ASD) in children with 292 instances and 21 attributes, including 10 behavioural scores and other demographic information. . It includes various demographic and behavioral features that are used to identify potential ASD cases.
+
+**Behavioral Scores include:**
 
 - **A1_Score:** Integer - The answer code for the first question in the AQ-10-Child questionnaire (0 or 1).
 
@@ -26,6 +28,8 @@
 
 - **A10_Score:** Integer - The answer code for the tenth question in the AQ-10-Child questionnaire (0 or 1).
 
+**Demographic Information includes:**
+
 - **age:** Integer - Age of the individual in years.
 
 - **gender:** Categorical - Gender of the individual (Male or Female).
@@ -46,7 +50,28 @@
 
 - **relation:** Categorical - The person completing the test (Parent, self, caregiver, medical staff, clinician, etc.).
 
-- **class:** Binary - The target variable indicating whether the individual is classified as having ASD (yes or no).
+- **Target Variables, class:** Binary - The target variable indicating whether the individual is classified as having ASD (yes or no).
+
+**Machine Learning Models Used:**
+
+**Support Vector Machine (SVM)** - Effective for high-dimensional data with clear decision boundaries
+
+**XGBoost** - High-speed, scalable gradient boosting algorithm for complex data patterns
+
+**Logistic Regression** - Simple, interpretable baseline model for binary classification
 
 **Source:** Thabtah, F. (2017). Autistic Spectrum Disorder Screening Data for Children [Dataset]. UCI Machine Learning Repository. Retrieved from https://doi.org/10.24432/C5659W.
 
+**Installation**
+To run this application follow these steps:
+
+1. Clone the repository
+```bash
+git clone https://github.com/Slopezs848/DSCI-Team-B-
+```
+2. Installed required libraries 
+3. Run the streamlit app: 
+```bash
+streamlit run app.py
+```
+4. Choose your input and hit the predict button. 
