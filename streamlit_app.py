@@ -18,14 +18,14 @@ with open(model_filename, 'rb') as file:
 #load feature importance
 def load_feature_importance():
     try:
-        importance_df = pd.read_csv('feature_importance.csv')
+        importance_df = pd.read_csv('Data/feature_importance.csv')
         return importance_df
     except FileNotFoundError:
         st.error("Feature importance file not found.")
         return None
     
 #sidebar 
-image_sidebar = Image.open('autism.jpg')
+image_sidebar = Image.open('UI_Photos/autism.jpg')
 st.sidebar.image(image_sidebar, use_container_width =True)
 st.sidebar.header("Autism Prediction, Please fill the form below")
 
@@ -98,7 +98,7 @@ def get_user_input():
     return user_data
 
 #top banner
-image_banner = Image.open('autism_prediction.jpg')
+image_banner = Image.open('UI_Photos/autism_prediction.jpg')
 st.image(image_banner, use_container_width =True)
 
 st.markdown(
