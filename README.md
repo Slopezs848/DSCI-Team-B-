@@ -75,6 +75,6 @@ pip install -r requirements.txt
 ```
 3. Run the streamlit app: 
 ```bash
-streamlit run app.py
+streamlit run streamlit_app.py
 ```
 4. Choose your input and hit the predict button. 
