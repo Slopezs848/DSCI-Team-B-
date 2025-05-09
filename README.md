@@ -52,6 +52,8 @@
 
 - **Target Variables, class:** Binary - The target variable indicating whether the individual is classified as having ASD (yes or no).
 
+**Source:** Thabtah, F. (2017). Autistic Spectrum Disorder Screening Data for Children [Dataset]. UCI Machine Learning Repository. Retrieved from https://doi.org/10.24432/C5659W.
+
 **Machine Learning Models Used:**
 
 **Support Vector Machine (SVM)** - Effective for high-dimensional data with clear decision boundaries
@@ -59,8 +61,6 @@
 **XGBoost** - High-speed, scalable gradient boosting algorithm for complex data patterns
 
 **Logistic Regression** - Simple, interpretable baseline model for binary classification
-
-**Source:** Thabtah, F. (2017). Autistic Spectrum Disorder Screening Data for Children [Dataset]. UCI Machine Learning Repository. Retrieved from https://doi.org/10.24432/C5659W.
 
 **Installation**
 To run this application follow these steps:
@@ -70,6 +70,9 @@ To run this application follow these steps:
 git clone https://github.com/Slopezs848/DSCI-Team-B-
 ```
 2. Installed required libraries 
+```bash
+pip install -r requirements.txt
+```
 3. Run the streamlit app: 
 ```bash
 streamlit run app.py
