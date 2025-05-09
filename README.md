@@ -68,6 +68,34 @@
 - **Logistic Regression** - Simple, interpretable baseline model for binary classification
 
 
+project_structure/
+│
+├── Code/                  
+│   ├── Data Preparation/               
+|   ├── Exploratory Data Analysis/
+│   └── Models/         
+│
+├── Data/             
+|   ├── Untouched Data/             
+|   ├── Cleaned Data/
+|   ├── Data Encoded/
+│   └── Feature Importance/ 
+│
+├── Documentation_and_Presentations/                 
+│   ├── Autism Screening Child Data Description/  
+│   ├── EDA Presentation/   
+│   ├── Final Capstone Presentation/ 
+│   ├── Final EDA/   
+│   ├── Final ML/ 
+│   ├── Project Proposal/ 
+|
+├── Literature_Survey/               
+│             
+│
+├── UI_Photos/                
+│
+└── README.md             
+
 **Installation**
 To run this application follow these steps:
 
