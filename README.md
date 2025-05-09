@@ -68,7 +68,7 @@
 - **Logistic Regression** - Simple, interpretable baseline model for binary classification
 
 
-project_structure/
+**Project_structure**
 │
 ├── Code/                  
 │   ├── Data Preparation/               
