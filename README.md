@@ -2,9 +2,12 @@
 
 **Modeling for Autistic Spectrum Disorder Screening Data for Children Dataset**
 
+
 **Project Overview:** This project aims to develop a machine learning-based application for early autism detection in children, using a dataset introduced by Fadi Fayez Thabtah from the Department of Digital Technology at the Manukau Institute of Technology. The application leverages behavioral and demographic features to accurately predict autism spectrum disorder (ASD) traits, supporting timely intervention and improved long term outcomes. 
 
+
 **Data Set Description:** This dataset contains information related to the screening of autistic spectrum disorder (ASD) in children with 292 instances and 21 attributes, including 10 behavioural scores and other demographic information. . It includes various demographic and behavioral features that are used to identify potential ASD cases.
+
 
 **Behavioral Scores include:**
 
@@ -27,6 +30,7 @@
 - **A9_Score:** Integer - The answer code for the ninth question in the AQ-10-Child questionnaire (0 or 1).
 
 - **A10_Score:** Integer - The answer code for the tenth question in the AQ-10-Child questionnaire (0 or 1).
+
 
 **Demographic Information includes:**
 
@@ -54,13 +58,15 @@
 
 **Source:** Thabtah, F. (2017). Autistic Spectrum Disorder Screening Data for Children [Dataset]. UCI Machine Learning Repository. Retrieved from https://doi.org/10.24432/C5659W.
 
+
 **Machine Learning Models Used:**
 
-**Support Vector Machine (SVM)** - Effective for high-dimensional data with clear decision boundaries
+- **Support Vector Machine (SVM)** - Effective for high-dimensional data with clear decision boundaries
 
-**XGBoost** - High-speed, scalable gradient boosting algorithm for complex data patterns
+- **XGBoost** - High-speed, scalable gradient boosting algorithm for complex data patterns
 
-**Logistic Regression** - Simple, interpretable baseline model for binary classification
+- **Logistic Regression** - Simple, interpretable baseline model for binary classification
+
 
 **Installation**
 To run this application follow these steps:
@@ -78,3 +84,6 @@ pip install -r requirements.txt
 streamlit run streamlit_app.py
 ```
 4. Choose your input and hit the predict button. 
+
+
+**The structure of this repository is designed to provide a clear and organized view of the project's data preparation, model development, and user interface stages. This layout makes it easy for users to navigate through the different phases of the project, whether they are interested in the raw data, code implementation, or the deployed application. Each section is clearly labeled, allowing users to quickly locate the specific component or stage they want to explore.**
